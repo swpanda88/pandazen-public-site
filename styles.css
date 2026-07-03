@@ -10,7 +10,6 @@
   --line: rgba(32, 50, 41, 0.16);
   --shadow: 0 20px 60px rgba(24, 36, 31, 0.16);
   --max: 1180px;
-  --dev-bar-height: 38px;
 }
 
 * {
@@ -54,7 +53,7 @@ a {
 
 .site-header {
   position: fixed;
-  inset: var(--dev-bar-height) 0 auto;
+  inset: 0 0 auto;
   z-index: 20;
   display: flex;
   align-items: center;
@@ -726,6 +725,7 @@ textarea:focus {
 
 .legal-page {
   background: var(--paper);
+  padding-top: 86px; /* Offset for fixed header */
 }
 
 .legal-header {
@@ -751,15 +751,18 @@ textarea:focus {
 }
 
 .legal-main h1 {
-  max-width: none;
   margin-bottom: 12px;
   color: var(--ink);
-  font-size: clamp(2.4rem, 6vw, 4.8rem);
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .legal-updated {
   margin-bottom: 34px;
   color: rgba(32, 50, 41, 0.66);
+  font-size: 1.05rem;
+  font-style: italic;
 }
 
 .legal-main section {
@@ -768,13 +771,26 @@ textarea:focus {
 }
 
 .legal-main h2 {
-  margin-bottom: 10px;
-  font-size: clamp(1.45rem, 3vw, 2rem);
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-size: clamp(1.3rem, 3vw, 1.6rem);
+  color: var(--deep);
 }
 
-.legal-main p {
-  margin: 0;
-  color: rgba(32, 50, 41, 0.78);
+.legal-main p,
+.legal-main ul {
+  margin: 0 0 16px;
+  color: rgba(32, 50, 41, 0.85);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.legal-main ul {
+  padding-left: 24px;
+}
+
+.legal-main li {
+  margin-bottom: 8px;
 }
 
 .legal-main a {
