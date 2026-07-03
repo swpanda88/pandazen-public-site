@@ -725,7 +725,11 @@ textarea:focus {
 
 .legal-page {
   background: var(--paper);
-  padding-top: 86px; /* Offset for fixed header */
+  padding-top: 86px; /* Offset for header */
+}
+
+.legal-page .site-header {
+  position: absolute; /* Prevents mid-page duplication on screenshots */
 }
 
 .legal-header {
