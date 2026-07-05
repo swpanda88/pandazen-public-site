@@ -132,7 +132,7 @@ nav.addEventListener("click", (event) => {
   }
 });
 
-contactForm.addEventListener("submit", async (event) => {
+contactForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const form = new FormData(contactForm);
   const payload = formPayload(form);
@@ -143,31 +143,41 @@ contactForm.addEventListener("submit", async (event) => {
     showFormErrors(errors);
     return;
   }
-  submitStatus.textContent = "Sending your request...";
 
-  try {
-    const response = await fetch("/api/submit", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    const result = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      const backendErrors = result.fields && typeof result.fields === "object"
-        ? result.fields
-        : { form: result.error || result.message || "Please check the highlighted details and try again." };
-      showFormErrors(backendErrors);
-      return;
-    }
-    contactForm.reset();
-    clearFormErrors();
-    submitStatus.textContent = result.message || "Thanks, your request has been sent successfully.";
-    return;
-  } catch {
-    submitStatus.classList.add("error");
-    submitStatus.textContent = "Sorry, the form could not send just now. Please try again later or email us directly.";
-    return;
-  }
+  const subject = `New PandaZen enquiry — ${payload.area} — ${payload.name}`;
+  const body = `Name: ${payload.name}
+Email: ${payload.email}
+Phone: ${payload.phone}
+Preferred contact method: ${valueOrNotSelected(payload.contactMethod)}
+Area/Postcode: ${payload.area}
+Best time to contact: ${valueOrNotSelected(payload.contactTime)}
+Service: ${payload.service}
+Frequency: ${valueOrNotSelected(payload.frequency)}
+How soon: ${valueOrNotSelected(payload.urgency)}
+Preferred days/times: ${valueOrNotSelected(payload.preferredTimes)}
+Property type: ${valueOrNotSelected(payload.propertyType)}
+Approx size: ${valueOrNotSelected(payload.propertySize)}
+Bedrooms: ${valueOrNotSelected(payload.bedrooms)}
+Bathrooms: ${valueOrNotSelected(payload.bathrooms)}
+Pets: ${valueOrNotSelected(payload.pets)}
+Parking: ${valueOrNotSelected(payload.parking)}
+Main priorities: ${payload.priorities.length ? payload.priorities.join(", ") : "Not selected"}
+Products preference: ${valueOrNotSelected(payload.products)}
+Vacuum/hoover supplied by: ${valueOrNotSelected(payload.vacuum)}
+Mop supplied by: ${valueOrNotSelected(payload.mop)}
+
+Message/Notes:
+${valueOrNotSelected(payload.message)}
+
+Marketing opt-in status: ${payload.marketingConsent ? "Yes" : "No"}
+
+I understand that submitting this form is an enquiry only and does not create a confirmed booking. PandaZen will contact me to discuss availability, scope and price.`;
+
+  const mailtoLink = `mailto:hello.pandazen@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailtoLink;
+
+  submitStatus.classList.remove("error");
+  submitStatus.textContent = "Your email app should now open with your enquiry prepared. Please review and send the email to PandaZen. If your email app does not open, please email hello.pandazen@gmail.com and include your name, phone number, area/postcode and cleaning requirements.";
 });
 
 updateHeader();
